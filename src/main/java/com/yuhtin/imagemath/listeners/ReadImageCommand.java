@@ -22,18 +22,18 @@ public class ReadImageCommand extends ListenerAdapter {
 
         val imageLink = option.getAsString();
         if (!imageLink.matches(LINK_REGEX)) {
-            event.reply(":x: Este comando aceita apenas link de imagens.").queue();
+            event.reply(":x: Only image links supported.").queue();
             return;
         }
 
         val mathExpression = ResolveMath.resolveImageMath(imageLink);
         if (mathExpression == null) {
-            event.reply(":x: Link inválido ou inlegível.").queue();
+            event.reply(":x: Invalid link or image.").queue();
             return;
         }
 
         val result = ResolveMath.eval(mathExpression);
-        event.reply("🎉 O resultado capturado pela imagem é " + DECIMAL_FORMAT.format(result) + ".").queue();
+        event.reply("🎉 The result is " + DECIMAL_FORMAT.format(result) + ".").queue();
 
     }
 }
