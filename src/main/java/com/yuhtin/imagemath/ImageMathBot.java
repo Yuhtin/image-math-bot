@@ -3,6 +3,7 @@ package com.yuhtin.imagemath;
 import com.yuhtin.imagemath.listeners.ReadImageCommand;
 import lombok.val;
 import net.dv8tion.jda.api.JDABuilder;
+import net.dv8tion.jda.api.interactions.commands.OptionType;
 import net.dv8tion.jda.api.interactions.commands.build.CommandData;
 import net.dv8tion.jda.api.requests.GatewayIntent;
 import net.dv8tion.jda.api.utils.ChunkingFilter;
@@ -25,9 +26,12 @@ public class ImageMathBot {
                     .addEventListeners(new ReadImageCommand())
                     .build();
 
-            jdaBuilder.updateCommands()
-                    .addCommands(new CommandData("readimage", "Resolve math expressions by image link"))
-                    .queue();
+            val readImageCommand = new CommandData("readimage", "Resolve math expressions by image link");
+            readImageCommand.addOption(OptionType.STRING, "imagelink", "Image link with math expression", true);
+
+            jdaBuilder.updateCommands().addCommands(readImageCommand).queue();
+
+            System.out.println("Online!");
 
         } catch (LoginException exception) {
             exception.printStackTrace();

@@ -1,6 +1,8 @@
 package com.yuhtin.imagemath.util;
 
 import lombok.val;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 import org.json.JSONObject;
 
 import java.io.OutputStream;
@@ -12,7 +14,8 @@ public class ResolveMath {
 
     private static final String OPTIIC = System.getenv("OPTIIC_API_KEY");
 
-    public static String resolveImageMath(String imageUrl) {
+    @Nullable
+    public static String resolveImageMath(@NotNull String imageUrl) {
         try {
             URL url = new URL("https://api.optiic.dev/process");
             HttpURLConnection http = (HttpURLConnection) url.openConnection();
@@ -44,7 +47,7 @@ public class ResolveMath {
     }
 
     // https://stackoverflow.com/a/26227947
-    public static double eval(final String str) {
+    public static double eval(@NotNull String str) {
         return new Object() {
             int pos = -1, ch;
 
