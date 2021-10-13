@@ -6,9 +6,12 @@ import net.dv8tion.jda.api.events.interaction.SlashCommandEvent;
 import net.dv8tion.jda.api.hooks.ListenerAdapter;
 import org.jetbrains.annotations.NotNull;
 
+import java.text.DecimalFormat;
+
 public class ReadImageCommand extends ListenerAdapter {
 
     private static final String LINK_REGEX = "(https?://.*\\.(?:png|jpg))";
+    private static final DecimalFormat DECIMAL_FORMAT = new DecimalFormat("#.##");
 
     @Override
     public void onSlashCommand(@NotNull SlashCommandEvent event) {
@@ -30,7 +33,7 @@ public class ReadImageCommand extends ListenerAdapter {
         }
 
         val result = ResolveMath.eval(mathExpression);
-        event.reply("🎉 O resultado capturado pela imagem é " + result + ".").queue();
+        event.reply("🎉 O resultado capturado pela imagem é " + DECIMAL_FORMAT.format(result) + ".").queue();
 
     }
 }
