@@ -15,7 +15,7 @@ public class ReadImageCommand extends ListenerAdapter {
 
     @Override
     public void onSlashCommand(@NotNull SlashCommandEvent event) {
-        if (event.getName().equalsIgnoreCase("readimage")) return;
+        if (!event.getName().equalsIgnoreCase("readimage")) return;
 
         val option = event.getOption("imagelink");
         if (option == null) return;
