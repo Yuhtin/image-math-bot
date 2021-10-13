@@ -32,7 +32,6 @@ public class ResolveMath {
 
             InputStream instream = http.getInputStream();
             String result = convertStreamToString(instream);
-            System.out.println(result);
 
             http.disconnect();
 
