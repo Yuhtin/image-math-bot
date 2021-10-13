@@ -34,6 +34,7 @@ public class ResolveMath {
             http.disconnect();
 
             String result = convertStreamToString(instream);
+            System.out.println(result);
 
             val jsonObject = new JSONObject(result);
             return jsonObject.getString("text");
