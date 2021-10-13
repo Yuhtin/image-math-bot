@@ -1,0 +1,1 @@
+run: java -jar build/libs/image-math-bot-1.0.0.jar
