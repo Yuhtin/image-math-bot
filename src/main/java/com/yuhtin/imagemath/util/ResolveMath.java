@@ -31,10 +31,10 @@ public class ResolveMath {
             stream.write(out);
 
             InputStream instream = http.getInputStream();
-            http.disconnect();
-
             String result = convertStreamToString(instream);
             System.out.println(result);
+
+            http.disconnect();
 
             val jsonObject = new JSONObject(result);
             return jsonObject.getString("text");
