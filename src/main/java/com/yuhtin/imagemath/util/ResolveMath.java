@@ -5,7 +5,7 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.json.JSONObject;
 
-import java.io.OutputStream;
+import java.io.*;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.nio.charset.StandardCharsets;
@@ -23,27 +23,46 @@ public class ResolveMath {
             http.setDoOutput(true);
             http.setRequestProperty("Content-Type", "application/json");
 
-            String data = "{" +
-                    "apiKey: " + OPTIIC + ", " +
-                    "mode: ocr, " +
-                    "url: " + imageUrl +
-                    "}";
+            String data = "{\"apiKey\": \"" + OPTIIC + "\", \"mode\": \"ocr\", \"url\": \"" + imageUrl + "\"}";
 
             byte[] out = data.getBytes(StandardCharsets.UTF_8);
 
             OutputStream stream = http.getOutputStream();
             stream.write(out);
 
+            InputStream instream = http.getInputStream();
             http.disconnect();
 
-            if (http.getResponseCode() != 200) return null;
+            String result = convertStreamToString(instream);
 
-            val jsonObject = new JSONObject(http.getResponseMessage());
+            val jsonObject = new JSONObject(result);
             return jsonObject.getString("text");
         } catch (Exception exception) {
             exception.printStackTrace();
             return null;
         }
+    }
+
+    private static String convertStreamToString(InputStream is) {
+
+        BufferedReader reader = new BufferedReader(new InputStreamReader(is));
+        StringBuilder sb = new StringBuilder();
+
+        String line;
+        try {
+            while ((line = reader.readLine()) != null) {
+                sb.append(line).append("\n");
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        } finally {
+            try {
+                is.close();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+        return sb.toString();
     }
 
     // https://stackoverflow.com/a/26227947
@@ -111,11 +130,22 @@ public class ResolveMath {
                     while (ch >= 'a' && ch <= 'z') nextChar();
                     String func = str.substring(startPos, this.pos);
                     x = parseFactor();
-                    if (func.equals("sqrt")) x = Math.sqrt(x);
-                    else if (func.equals("sin")) x = Math.sin(Math.toRadians(x));
-                    else if (func.equals("cos")) x = Math.cos(Math.toRadians(x));
-                    else if (func.equals("tan")) x = Math.tan(Math.toRadians(x));
-                    else throw new RuntimeException("Unknown function: " + func);
+                    switch (func) {
+                        case "sqrt":
+                            x = Math.sqrt(x);
+                            break;
+                        case "sin":
+                            x = Math.sin(Math.toRadians(x));
+                            break;
+                        case "cos":
+                            x = Math.cos(Math.toRadians(x));
+                            break;
+                        case "tan":
+                            x = Math.tan(Math.toRadians(x));
+                            break;
+                        default:
+                            throw new RuntimeException("Unknown function: " + func);
+                    }
                 } else {
                     throw new RuntimeException("Unexpected: " + (char) ch);
                 }
